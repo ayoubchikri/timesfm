@@ -122,8 +122,10 @@ def forecast_series(
     inputs = []
     for col in value_cols:
         # Retain missing observations so every column keeps the CSV time grid.
-        # TimesFM handles NaNs during preprocessing; dropping them shifts time.
+        # TimesFM interpolates gaps; dropping them shifts time.
         values = df[col].to_numpy(dtype=np.float32)
+        if values.size == 0 or np.isnan(values).all():
+            raise ValueError(f"Column {col!r} has no observed values to forecast.")
         inputs.append(values)
 
     print(f"Forecasting {len(inputs)} series with horizon={horizon}...")
