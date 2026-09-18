@@ -514,11 +514,14 @@ class TimesFM3Forecaster:
     pf_2d: list[np.ndarray | None] = []
 
     for idx, ctx in enumerate(contexts):
-      if np.ndim(ctx) not in (1, 2) or (
-        np.ndim(ctx) == 2 and np.shape(ctx)[0] == 0
+      if (
+        np.ndim(ctx) not in (1, 2)
+        or np.shape(ctx)[-1] == 0
+        or (np.ndim(ctx) == 2 and np.shape(ctx)[0] == 0)
       ):
         raise ValueError(
-          f"contexts[{idx}] must be a 1D series or a 2D array with at least one variate."
+          f"contexts[{idx}] must have at least one time step and, for 2D"
+          " inputs, at least one variate."
         )
       for name, covariate, expected_length in (
         ("past_only_covariates", po_cov_list[idx], np.shape(ctx)[-1]),

@@ -74,7 +74,14 @@ def test_invalid_horizon(forecaster, horizon):
 
 
 @pytest.mark.parametrize(
-  "context", [np.array(1.0), np.ones((1, 1, 8)), np.ones((0, 8))]
+  "context",
+  [
+    np.array(1.0),
+    np.ones((1, 1, 8)),
+    np.ones((0, 8)),
+    np.array([]),
+    np.empty((1, 0)),
+  ],
 )
 def test_invalid_context_shape(forecaster, context):
   with pytest.raises(ValueError, match="contexts"):
